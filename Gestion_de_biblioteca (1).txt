@@ -1,0 +1,108 @@
+
+class Libro:
+    def _init_(self, titulo, autor, isbn, cantidad):
+        self.titulo = titulo
+        self.autor = autor
+        self.isbn = isbn
+        self.cantidad = cantidad
+
+def agregar_libro(inventario):
+    titulo = input("Ingrese el título del libro: ")
+    autor = input("Ingrese el autor del libro: ")
+    isbn = input("Ingrese el número de ISBN del libro: ")
+    cantidad = int(input("Ingrese la cantidad de copias disponibles: "))
+
+    nuevo_libro = Libro(titulo, autor, isbn, cantidad)
+    inventario.append(nuevo_libro)
+    print("Libro agregado exitosamente.")
+
+def buscar_libros(inventario):
+    busqueda = input("Ingrese el título o autor a buscar: ")
+    libros_encontrados = []
+
+    for libro in inventario:
+        if busqueda.lower() in libro.titulo.lower() or busqueda.lower() in libro.autor.lower():
+            libros_encontrados.append(libro)
+
+    if libros_encontrados:
+        print("Libros encontrados:")
+        for libro in libros_encontrados:
+            print("Título:", libro.titulo)
+            print("Autor:", libro.autor)
+            print("ISBN:", libro.isbn)
+            print("Cantidad disponible:", libro.cantidad)
+            print("-----------------------")
+    else:
+        print("No se encontraron libros.")
+
+def prestar_libro(inventario, prestamos):
+    isbn = input("Ingrese el número de ISBN del libro a prestar: ")
+
+    for libro in inventario:
+        if libro.isbn == isbn:
+            if libro.cantidad > 0:
+                libro.cantidad -= 1
+                prestamos.append(libro)
+                print("Préstamo realizado exitosamente.")
+            else:
+                print("No hay copias disponibles para préstamo.")
+            return
+
+    print("Libro no encontrado en el inventario.")
+
+def devolver_libro(inventario, prestamos):
+    isbn = input("Ingrese el número de ISBN del libro a devolver: ")
+
+    for libro in prestamos:
+        if libro.isbn == isbn:
+            libro.cantidad += 1
+            prestamos.remove(libro)
+            print("Devolución realizada exitosamente.")
+            return
+
+    print("Libro no encontrado en los préstamos.")
+
+def generar_reportes(inventario, prestamos):
+    print("Reporte de libros más prestados:")
+    libros_ordenados = sorted(prestamos, key=lambda libro: libro.cantidad, reverse=True)
+    for libro in libros_ordenados:
+        print("Título:", libro.titulo)
+        print("Autor:", libro.autor)
+        print("ISBN:", libro.isbn)
+        print("Cantidad de préstamos:", len(prestamos) - libro.cantidad)
+        print("-----------------------")
+
+def gestion_biblioteca():
+    inventario = []
+    prestamos = []
+
+    while True:
+        print("\nSistema de Gestión de Biblioteca")
+        print("1. Agregar libro")
+        print("2. Buscar libros")
+        print("3. Prestar libro")
+        print("4. Devolver libro")
+        print("5. Generar reportes")
+        print("6. Salir")
+
+        opcion = int(input("Ingrese la opción: "))
+
+        if opcion == 1:
+            agregar_libro(inventario)
+        elif opcion == 2:
+            buscar_libros(inventario)
+        elif opcion == 3:
+            prestar_libro(inventario, prestamos)
+        elif opcion == 4:
+            devolver_libro(inventario, prestamos)
+        elif opcion == 5:
+            generar_reportes(inventario, prestamos)
+        elif opcion == 6:
+            print("¡Hasta luego!")
+            break
+        else:
+            print("Opción inválida. Por favor, seleccione una opción válida.")
+
+gestion_biblioteca()
+
+#Franklyn Brea 2023-0008
